@@ -1,0 +1,14 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Orchestration",
+      "description": "Skills for orchestrating multi-agent coding work — implementing changes with parallel subagents, then shipping and reviewing them.",
+      "skills": [
+        "orchestrating-subagents",
+        "shipping-pr-reviews"
+      ]
+    }
+  ]
+}

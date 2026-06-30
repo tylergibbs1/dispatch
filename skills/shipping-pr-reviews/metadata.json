@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "author": "tylergibbs",
+  "date": "June 2026",
+  "abstract": "Push the current changes to a pull request, then launch a dynamic workflow that reviews the PR diff across dimensions, adversarially verifies each finding, and fixes the confirmed ones before pushing the fixes back to the PR. Fix agents pull fresh docs via Context7. Pairs with orchestrating-subagents, which implements the change first.",
+  "references": [
+    "https://code.claude.com/docs/en/workflows",
+    "https://code.claude.com/docs/en/sub-agents",
+    "https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices",
+    "https://github.com/vercel-labs/agent-skills"
+  ]
+}

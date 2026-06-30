@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "author": "tylergibbs",
+  "date": "June 2026",
+  "abstract": "Orchestrate a multi-agent implementation. The calling agent acts as orchestrator: it scouts the repo, freezes shared contracts, decomposes the task into independent subtasks, dispatches one subagent per subtask in parallel, and briefs each with self-contained context plus a mandate to pull fresh docs via Context7. Covers Claude Code subagents, Claude Code dynamic workflows, and Codex subagents.",
+  "references": [
+    "https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices",
+    "https://code.claude.com/docs/en/sub-agents",
+    "https://code.claude.com/docs/en/workflows",
+    "https://developers.openai.com/codex/concepts/subagents",
+    "https://github.com/vercel-labs/agent-skills"
+  ]
+}
