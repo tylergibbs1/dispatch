@@ -70,6 +70,11 @@ Each skill contains:
 - `references/` — supporting docs loaded on demand (templates, dispatch mechanisms)
 - `metadata.json` — version and references
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add a new skill and the
+frontmatter rules enforced by CI.
+
 ## License
 
 MIT
