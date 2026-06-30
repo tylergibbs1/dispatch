@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Validates every skills/<name>/SKILL.md against the Agent Skills frontmatter
-// rules: required name/description, name charset/length, no reserved words, and
-// name matching the directory. No external dependencies — uses a minimal
-// frontmatter parser scoped to the two fields we validate.
+// rules: required name/description, name charset/length, no reserved words, name
+// matching the directory, and YAML-safety of plain scalars. No external
+// dependencies — a minimal frontmatter parser scoped to what we validate.
 //
 // Usage: node scripts/validate-skills.mjs
 // Exits non-zero (and prints each problem) if any skill is invalid.
@@ -18,33 +18,50 @@ function fail(skill, msg) {
   errors.push(`${skill}: ${msg}`)
 }
 
-// Pull the top-level `name:` and `description:` out of the YAML frontmatter.
-// description may be a folded block continued on indented lines, so we collect
-// continuation lines until the next top-level key.
+// Parse the top-level keys of the YAML frontmatter. For each key we capture the
+// folded value plus its `style`: 'plain' (unquoted), 'quoted', 'block' (>/|), or
+// 'mapping' (a nested key: value block like `metadata:`). Style matters because a
+// *plain* multi-line scalar containing ": " is invalid YAML — strict parsers (e.g.
+// the skills CLI) reject the whole file and silently drop the skill. That is the
+// bug this validator exists to catch, so we surface it instead of guessing.
 function parseFrontmatter(text) {
   if (!text.startsWith('---')) return null
   const end = text.indexOf('\n---', 3)
   if (end === -1) return null
   const lines = text.slice(text.indexOf('\n') + 1, end).split('\n')
 
-  const fields = {}
-  let currentKey = null
-  let buffer = []
-  const flush = () => {
-    if (currentKey) fields[currentKey] = buffer.join(' ').trim()
-    buffer = []
-  }
+  const entries = []
+  let cur = null
   for (const line of lines) {
-    const m = line.match(/^([a-zA-Z0-9_]+):\s?(.*)$/)
+    const m = line.match(/^([a-zA-Z0-9_-]+):\s?(.*)$/)
     if (m && !line.startsWith(' ')) {
-      flush()
-      currentKey = m[1]
-      buffer = m[2] ? [m[2]] : []
-    } else if (currentKey && line.trim()) {
-      buffer.push(line.trim())
+      if (cur) entries.push(cur)
+      cur = { key: m[1], inline: m[2], lines: [] }
+    } else if (cur && line.trim()) {
+      cur.lines.push(line)
     }
   }
-  flush()
+  if (cur) entries.push(cur)
+
+  const fields = {}
+  for (const { key, inline, lines: raw } of entries) {
+    const join = (arr) => arr.map((l) => l.trim()).join(' ').trim()
+    let style, value
+    if (/^[>|]/.test(inline)) {
+      style = 'block'
+      value = join(raw)
+    } else if (/^["']/.test(inline)) {
+      style = 'quoted'
+      value = join([inline, ...raw])
+    } else if (inline === '' && raw.length && raw.every((l) => /^\s+[\w-]+:(\s|$)/.test(l))) {
+      style = 'mapping'
+      value = ''
+    } else {
+      style = 'plain'
+      value = inline ? join([inline, ...raw]) : join(raw)
+    }
+    fields[key] = { value, style }
+  }
   return fields
 }
 
@@ -75,7 +92,18 @@ for (const dir of skillDirs) {
     continue
   }
 
-  const name = fm.name
+  // YAML-safety: a plain (unquoted, non-block) scalar must not contain ": " or
+  // end with ":", or strict parsers treat it as a nested mapping and drop the skill.
+  for (const [k, { value, style }] of Object.entries(fm)) {
+    if (style === 'plain' && (/:\s/.test(value) || /:$/.test(value))) {
+      fail(
+        dir,
+        `\`${k}\` is an unquoted scalar containing ": " — use a block scalar (>-) or quote it`
+      )
+    }
+  }
+
+  const name = fm.name?.value
   if (!name) {
     fail(dir, 'frontmatter missing `name`')
   } else {
@@ -88,7 +116,7 @@ for (const dir of skillDirs) {
       fail(dir, `name "${name}" should match the directory name "${dir}"`)
   }
 
-  const description = fm.description
+  const description = fm.description?.value
   if (!description) {
     fail(dir, 'frontmatter missing `description`')
   } else if (description.length > 1024) {

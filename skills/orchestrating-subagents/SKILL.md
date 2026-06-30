@@ -1,12 +1,13 @@
 ---
 name: orchestrating-subagents
-description:
+description: >-
   Orchestrate a multi-agent implementation: decompose a task, fan out subagents to
   implement each piece in parallel, and brief each one with the context it needs
   plus a mandate to pull fresh docs via Context7. Use when the user wants to
   "use subagents", "fan out", "parallelize implementation", "orchestrate agents",
   spin up workers, or build a feature that splits into independent workstreams.
   Covers Claude Code subagents, Claude Code dynamic workflows, and Codex subagents.
+disable-model-invocation: true
 license: MIT
 metadata:
   author: tylergibbs

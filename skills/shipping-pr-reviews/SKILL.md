@@ -1,12 +1,13 @@
 ---
 name: shipping-pr-reviews
-description:
+description: >-
   Push the current changes to a pull request, then launch a dynamic workflow that
   reviews the PR diff, adversarially verifies each finding, and fixes the confirmed
   ones — pushing the fixes back to the PR. Use when the user wants to "push to a PR
   and review", "open a PR then review and fix findings", "ship and review", or run
   a multi-agent review-and-fix pass over a branch. Pairs with orchestrating-subagents
   (which implements the change first).
+disable-model-invocation: true
 license: MIT
 metadata:
   author: tylergibbs

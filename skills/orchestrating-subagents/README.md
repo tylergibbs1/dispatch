@@ -40,7 +40,7 @@ pushed to a repo, install it with the `skills` CLI — the same way
 [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) installs:
 
 ```bash
-npx skills add tylergibbs1/dispatch
+npx skills@latest add tylergibbs1/dispatch
 ```
 
 Skills are available automatically once installed; the agent uses them when a

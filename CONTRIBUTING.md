@@ -24,9 +24,11 @@ pull request.
    ```markdown
    ---
    name: your-skill
-   description:
+   description: >-
      What the skill does and when to use it — third person, specific, with the
      trigger phrases a user would say. This is how the agent decides to load it.
+   # Optional: invoke-only (no auto-trigger) for heavyweight/expensive skills.
+   disable-model-invocation: true
    ---
 
    # Your Skill
@@ -34,9 +36,12 @@ pull request.
    Body: the instructions the agent follows when the skill is triggered.
    ```
 
-3. **Register it for skills.sh** by adding the directory name to a grouping in
-   [`skills.sh.json`](skills.sh.json), and list it in the root
-   [`README.md`](README.md) under **Available Skills**.
+3. **Register it** in all three places:
+   - [`skills.sh.json`](skills.sh.json) — add the directory name to a grouping (for
+     the skills.sh listing).
+   - [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) — add
+     `"./skills/<your-skill>"` to the `skills` array (for Claude Code plugin install).
+   - [`README.md`](README.md) — list it under **Available Skills**.
 
 4. **Validate locally**, then open a PR:
 
@@ -55,6 +60,12 @@ pull request.
 
 A failing check blocks the [Validate skills](.github/workflows/validate-skills.yml)
 workflow.
+
+> **YAML gotcha:** a multi-line `description` that contains `": "` (e.g.
+> "implementation: decompose...") must use a block scalar (`description: >-`) or be
+> quoted. As a plain unquoted scalar, strict YAML parsers — including the skills.sh
+> installer — treat the colon as a nested mapping and silently drop the skill. The
+> validator catches this.
 
 ## Authoring guidelines
 

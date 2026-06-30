@@ -1,0 +1,8 @@
+{
+  "name": "dispatch",
+  "description": "Skills for orchestrating multi-agent coding work: fan out subagents to implement, then ship to a PR and run a review-and-fix workflow. Every agent pulls fresh docs via Context7.",
+  "skills": [
+    "./skills/orchestrating-subagents",
+    "./skills/shipping-pr-reviews"
+  ]
+}

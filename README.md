@@ -45,21 +45,35 @@ The two pair up: `orchestrating-subagents` implements the change, then
 
 ## Installation
 
+With the [skills.sh](https://skills.sh) installer (pick the skills and the agents
+to install them on):
+
 ```bash
-npx skills add tylergibbs1/dispatch
+npx skills@latest add tylergibbs1/dispatch
 ```
 
-Skills are available automatically once installed; the agent uses them when a
-relevant task is detected.
+Or install as a Claude Code plugin (the repo ships a
+[`.claude-plugin/plugin.json`](.claude-plugin/plugin.json)):
+
+```text
+/plugin marketplace add tylergibbs1/dispatch
+/plugin install dispatch
+```
+
+Both skills are **invoke-only** (`disable-model-invocation: true`) — they spawn
+fleets of subagents / dynamic workflows, so you trigger them deliberately rather
+than have the agent auto-fire them.
 
 ## Usage
 
+Invoke them as slash commands (or by name):
+
 ```
-Use subagents to build the API, the UI, and the migration for feature X
+/orchestrating-subagents  build the API, the UI, and the migration for feature X
 ```
 
 ```
-Push this branch to a PR, then review and fix the findings
+/shipping-pr-reviews  push this branch to a PR, then review and fix the findings
 ```
 
 ## Skill structure
