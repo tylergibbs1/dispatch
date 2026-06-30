@@ -1,5 +1,8 @@
 # Dispatch
 
+[![skills.sh](https://skills.sh/b/tylergibbs1/dispatch)](https://skills.sh/tylergibbs1/dispatch)
+[![Validate skills](https://github.com/tylergibbs1/dispatch/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/tylergibbs1/dispatch/actions/workflows/validate-skills.yml)
+
 A collection of [Agent Skills](https://agentskills.io/) for orchestrating
 multi-agent coding work — fanning out subagents to implement a change, then
 shipping it to a PR and running a review-and-fix workflow over the diff.
