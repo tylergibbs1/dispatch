@@ -11,38 +11,6 @@ Both skills require every agent that touches an external library to pull current
 docs via [Context7](https://github.com/upstash/context7) before writing code, so
 implementations and fixes track real APIs instead of stale training data.
 
-## Available Skills
-
-### orchestrating-subagents
-
-Turns the calling agent into an **orchestrator**: it scouts the repo, freezes
-shared contracts, decomposes the task into independent subtasks, and dispatches one
-subagent per subtask in parallel — each with a self-contained brief and the
-Context7 mandate. Covers Claude Code subagents, Claude Code dynamic workflows, and
-Codex subagents.
-
-**Use when:**
-
-- "Use subagents" / "fan out" / "parallelize this implementation"
-- Building a feature that splits into independent workstreams
-- Orchestrating a codebase-wide audit or large migration
-
-### shipping-pr-reviews
-
-Pushes the current changes to a pull request, then launches a **dynamic workflow**
-that reviews the PR diff across dimensions, **adversarially verifies** each finding
-to drop false positives, and **fixes** the confirmed ones in isolated worktrees
-before pushing the fixes back to the PR.
-
-**Use when:**
-
-- "Push to a PR then review and fix findings"
-- "Ship and review this branch"
-- Running a multi-agent review-and-fix pass over a diff
-
-The two pair up: `orchestrating-subagents` implements the change, then
-`shipping-pr-reviews` ships and reviews it.
-
 ## Installation
 
 With the [skills.sh](https://skills.sh) installer (pick the skills and the agents
@@ -76,6 +44,38 @@ Invoke them as slash commands (or by name):
 /shipping-pr-reviews  push this branch to a PR, then review and fix the findings
 ```
 
+## Available skills
+
+### [orchestrating-subagents](skills/orchestrating-subagents/)
+
+Turns the calling agent into an **orchestrator**: it scouts the repo, freezes
+shared contracts, decomposes the task into independent subtasks, and dispatches one
+subagent per subtask in parallel — each with a self-contained brief and the
+Context7 mandate. Covers Claude Code subagents, Claude Code dynamic workflows, and
+Codex subagents.
+
+**Use when:**
+
+- "Use subagents" / "fan out" / "parallelize this implementation"
+- Building a feature that splits into independent workstreams
+- Orchestrating a codebase-wide audit or large migration
+
+### [shipping-pr-reviews](skills/shipping-pr-reviews/)
+
+Pushes the current changes to a pull request, then launches a **dynamic workflow**
+that reviews the PR diff across dimensions, **adversarially verifies** each finding
+to drop false positives, and **fixes** the confirmed ones in isolated worktrees
+before pushing the fixes back to the PR.
+
+**Use when:**
+
+- "Push to a PR then review and fix findings"
+- "Ship and review this branch"
+- Running a multi-agent review-and-fix pass over a diff
+
+The two pair up: `orchestrating-subagents` implements the change, then
+`shipping-pr-reviews` ships and reviews it.
+
 ## Skill structure
 
 Each skill contains:
@@ -87,8 +87,12 @@ Each skill contains:
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add a new skill and the
-frontmatter rules enforced by CI.
+frontmatter rules enforced by CI. Run the same check locally:
+
+```bash
+node scripts/validate-skills.mjs
+```
 
 ## License
 
-MIT
+MIT. See [LICENSE](LICENSE).
